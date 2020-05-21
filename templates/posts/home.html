@@ -4,5 +4,13 @@
 {% endblock title_block %}
 
 {% block body_block %}
-<h1>Homepage</h1>
+
+{% if search %}
+    {% for user in result %}
+        {{ user.username }}
+        {{ user.user_profile.full_name }}
+    {% endfor %}
+{% else %}
+
+{% endif %}
 {% endblock body_block %}

@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 
 from .models import UserProfile
 from .forms import CreateNewUser, EditProfile
+from post.forms import PostForm
+
 
 def sign_up(request):
     form = CreateNewUser()
@@ -53,6 +55,7 @@ def edit_profile(request):
         if form.is_valid():
             form.save(commit=True)
             form = EditProfile(instance=current_user)
+            return HttpResponseRedirect(reverse('login:profile'))
     context={
         'form': form,
         'title': 'Edit Profile'
@@ -64,3 +67,20 @@ def edit_profile(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('login:login'))
+
+
+@login_required
+def profile(request):
+    form = PostForm()
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return HttpResponseRedirect(reverse('home'))
+    context = {
+        'title': 'User',
+        'form': form
+    }
+    return render(request, 'login/user.html', context=context)
