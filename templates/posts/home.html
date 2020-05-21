@@ -7,8 +7,29 @@
 
 {% if search %}
     {% for user in result %}
-        {{ user.username }}
-        {{ user.user_profile.full_name }}
+    <div class="row">
+        <div class="col-sm-2">
+            {% if user.user_profile.profile_pic %}
+            <img
+                src="/media/{{ user.user_profile.profile_pic }}"
+                alt=""
+                class="rounded-circle"
+                width="50px"
+                height="50px"
+            />
+            {% else %}
+            <img src="/media/default.png" alt="" width="50px" height="50px"
+              class="rounded-circle"
+            />
+            {% endif %}
+        </div>
+        <div class="col-sm-10">
+            <a href="">{{ user.username }}</a>
+            <br>
+            {{ user.user_profile.full_name }}
+        </div>
+    </div>
+
     {% endfor %}
 {% else %}
 
