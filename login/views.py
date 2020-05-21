@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 from .models import UserProfile
 from .forms import CreateNewUser, EditProfile
@@ -84,3 +85,15 @@ def profile(request):
         'form': form
     }
     return render(request, 'login/user.html', context=context)
+
+
+@login_required
+def user(request, username):
+    user = User.objects.get(username=username)
+    if user == request.user:
+        return HttpResponseRedirect(reverse('login:profile'))
+    context = {
+        'title': 'Profile',
+        'user_other': user
+    }
+    return render(request, 'login/user_other.html', context=context)

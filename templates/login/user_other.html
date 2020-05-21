@@ -1,0 +1,64 @@
+{% extends 'navbar.html' %}
+
+{% block title_block %}
+{{ user_other.user_profile.full_name }} (@{{user_other.username}})
+{% endblock title_block %}
+
+{% block css_block %}
+<style>
+    .crop{
+        margin-top: 20px;
+        width: 200px;
+        height: 200px;
+        overflow: hidden;
+    }
+    .crop img{
+        width: 400px;
+        height: 300px;
+        margin: -75px 0 0 -100px;
+    }
+</style>
+{% endblock css_block %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col-sm-4">
+        {% if user_other.user_profile.profile_pic %}
+            <img
+                src="/media/{{ user.user_profile.profile_pic }}"
+                alt=""
+                class="rounded-circle"
+                width="150px"
+                height="150px"
+            />
+        {% else %}
+            <img
+                src="/media/default.png"
+                alt=""
+                class="rounded-circle"
+                width="150px"
+                height="150px"
+            />
+        {% endif %}
+    </div>
+    <div class="col-sm-8">
+        <h3>{{ user_other.username }} &nbsp; </h3>
+        <br>
+        <h4>{{ user_other.post.count }} posts &nbsp; &nbsp; 
+            {{ user_other.following.count }} followers &nbsp; &nbsp; 
+            {{ user_other.follower.count }}
+        </h4>
+        <br>
+        <h3>{{ user_other.user_profile.full_name }}</h3>
+        <h6>{{ user_other.user_profile.description|linebreaks }}</h6>
+    </div>
+</div>
+
+<div class="row">
+    {% for post in user_other.post.all %}
+        <div class="crop">
+            <img src="/media/{{post.image}}" alt="" title='{{post.caption}}'>
+        </div>
+    {% endfor %}
+</div>
+{% endblock body_block %}
